@@ -1,0 +1,222 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <locale.h>
+#include <windows.h>
+
+#define RESET "\033[0m"
+#define RED "\033[1;31m"
+#define GREEN "\033[1;32m"
+#define YELLOW "\033[1;33m"
+#define BLUE "\033[1;34m"
+#define MAGENT "\033[1;35m"
+#define CYAN "\033[1;36m"
+
+void habilitarCaracteresBR(){
+	setlocale(LC_ALL, "");
+}
+
+void tocarSom(char tipo){
+    switch(tipo){
+        case 'I': // Som de início de tela
+            Beep(750, 500); break;
+        case '@': // Coleta de chave
+            Beep(1000, 250); break;
+        case 'V': // Vitória
+            Beep(1200, 250); break;
+        case 'X': // Derrota
+            Beep(300, 300); break;
+        case '=': // Porta abrindo
+            Beep(350, 250); break;
+        case 'M': // Movimento
+            Beep(460, 250); break;
+        case 'E': //Erro ou bloqueio
+        	Beep(400, 250); break;
+    }
+}
+
+void limparTela(){
+	system("cls");
+}
+
+void iniciar(){
+	printf("\n\n\n\tPressione qualquer tecla para começar...");
+	getch();
+
+	limparTela();
+}
+
+void titulo(){
+	limparTela();
+	tocarSom('I');
+	printf(YELLOW ""
+"\t                                                   	\n"
+"\t            /\\    _.        _   |   _              \n"
+"\t           /--\\  (_|  |_|  (/_  |  (/_             \n"
+"\t                   |                               \n"
+"\t                                                   \n"
+"\t |\\/|   _   ._   _|_  o  ._   _    _   _   |  |  | \n"
+"\t |  |  (/_  | |   |_  |  |   (_)  _>  (_)  o  o  o \n\n" RESET);
+}
+
+void opcaoCreditos(){
+	limparTela();
+	printf(RED "\n\t\t\tThe Devs\n\n" RESET
+		"\tSamuel Alessandro Dessbesell --- 23270020\n"
+		"\t   Leonardo Avelar Salheb --- 23270313\n"
+		"\t     João Pedro Venuto --- 25300017\n");
+}
+
+void opcaoSair(){
+	limparTela();
+	printf(YELLOW "\n\n\t\tObrigado por jogar!\n\n" RESET);
+}
+
+void desenharVila(int xPlayer, int yPlayer, int vida){
+	limparTela();
+	
+	char vila[11][11] = {
+		"***********",
+        "*   *P*   *",
+        "*H  * *   *",
+        "*   * *   *",
+        "**=** **D**",
+        "*         *",
+        "*P        *",
+        "*         *",
+        "*****D*****",
+        "*$     = H*",
+        "***********"
+	};
+	int i, j;
+
+	printf(GREEN"\n\n\t\t----{Vila dos Guri}----\n\n"RESET);
+	
+	for (i = 0; i < 11; i++){
+		if(i < vida){
+			printf(RED"\t{HP}"RESET);
+		}else{
+			printf("\t");
+		}
+
+		printf("\t");
+		for(j = 0; j < 11; j++){
+			if(i == yPlayer && xPlayer == j){
+				printf(BLUE" &"RESET);
+			}else{
+				char c = vila[i][j];
+				switch(c){
+					case '*': printf(" *"); break;
+					case 'P': printf(YELLOW" P"RESET); break;
+					case 'D': printf(CYAN" D"RESET); break;
+					case 'H': printf(CYAN" H"RESET); break;
+					case '$': printf(CYAN" $"RESET); break;
+					case ' ': printf("  "); break;
+					default: printf(" %c", c); break;
+				}
+			}
+		}
+		
+		printf("\t");
+		
+		switch(i){
+		case 0: printf("w (subir)\n"); break;
+		case 1: printf("s (descer)\n"); break;
+		case 2: printf("a (esquerda)\n"); break;
+		case 3: printf("d (direita)\n"); break;
+		case 4: printf("e (interagir)\n"); break;
+		case 5: printf("Q (sair)\n"); break;
+		default: printf("\n"); break;
+		}
+	}
+}
+
+void opcaoJogar(){
+	int xPlayer = 1;
+	int yPlayer = 1;
+	int vida = 3;
+	char vila[11][11] = {
+		"***********",
+        "*   *P*   *",
+        "*H  * *   *",
+        "*   * *   *",
+        "**=** **D**",
+        "*         *",
+        "*P        *",
+        "*         *",
+        "*****D*****",
+        "*$     = H*",
+        "***********"
+	};
+
+	desenharVila(xPlayer, yPlayer, vida);
+
+	//MOVIMENTAÇÃO
+	while(1){
+		int hasValidImput = 0;
+		int desbugarSom = 0;
+		char input = getch();
+		if(input == 'Q'){
+			break;
+		}
+
+		int newX = xPlayer;
+		int newY = yPlayer;
+
+		if(input == 'w' && yPlayer > 0) newY--;
+		else if(input == 's' && yPlayer < 10) newY++;
+		else if(input == 'a' && xPlayer > 0) newX--;
+		else if(input == 'd' && xPlayer < 10) newX++;
+		else desbugarSom = 1; 
+
+		if(vila[newY][newX] == ' ' || vila[newY][newX] == '='){
+			xPlayer = newX;
+			yPlayer = newY;
+			if(desbugarSom == 0) tocarSom('M');
+			else tocarSom('E');
+			hasValidImput = 1;
+		}else{
+			tocarSom('E');
+		}
+		
+		if(hasValidImput == 1 && desbugarSom == 0)
+			desenharVila(xPlayer, yPlayer, vida);
+		
+	}
+}
+
+void menu(){
+	do{
+		titulo();
+		printf("\t\tBem-vindo ao Aquele Mentiroso!!!\n\n"
+			   "\t\tPermita-se morder a isca do mentiroso\n"
+			   "\t\te Divirta-se muito com isso!!! ;D\n\n\n");
+
+		printf("\t\tEscolha uma das opções abaixo para começar:\n\n"
+			   "\t\t1 - Jogar\n"
+			   "\t\t2 - Créditos\n"
+			   "\t\t3 - Sair\n");
+
+		char tecla = getch(); // Captura a tecla sem necessidade de Enter
+		switch(tecla){
+			case '1':
+				opcaoJogar(); tocarSom('I'); break;
+			case '2':
+				opcaoCreditos(); tocarSom('I'); break;
+			case '3':
+				opcaoSair(); tocarSom('E'); return;
+			default:
+				printf("\n\n\tOpção inválida. Tente novamente.\n"); tocarSom('E'); break;
+		}
+		printf("\n\n\tPressione qualquer tecla para continuar...");
+		getch();
+	} while(1);
+}
+
+int main(){
+	habilitarCaracteresBR();
+	iniciar();
+	menu();
+	
+	return 0;
+}
