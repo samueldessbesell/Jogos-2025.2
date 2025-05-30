@@ -60,18 +60,25 @@ void opcaoCreditos(){
 			BOLD"\t   Samuel D.\n\n"RESET
 			"\t\tDiálogo de Personagens\n"
 			"\t\tEfeitos Sonoros e Visuais\n"
+			"\t\tFase 1\n"
 			"\t\tGuia de Caracteres e Teclas\n"
 			"\t\tInteração com Chave e NPCs\n"
 			"\t\tMovimentação\n"
 			"\t\tTítulo e Menu\n"
 			"\t\tVida de Personagem\n"
-			"\t\tVila Inicial\n\n"
+			"\t\tVila dos Guri\n\n"
 			BOLD"\t   Leonardo S.\n\n"RESET
+			"\t\tBoss 1\n"
+			"\t\tBotão\n"
 			"\t\tDiálogo de Personagens\n"
-			"\t\t \n\n"
+			"\t\tEscorregar no Limo\n"
+			"\t\tEspinho\n"
+			"\t\tFase 2\n"
+			"\t\tLava\n\n"
 			BOLD"\t   João V.\n\n"RESET
-			"\t\t \n"
-			"\t\t \n");
+			"\t\tBoss 2\n"
+			"\t\tFase 3\n"
+			"\t\tTeletransporte\n");
 }
 
 void opcaoSair(){
@@ -187,7 +194,6 @@ void opcaoJogarVila(){
 	//MOVIMENTAÇÃO
 	while(1){
 		int hasValidImput = 0;
-		int desbugarSom = 0;
 		char input = getch();
 		if(input == 'Q') break;
 
@@ -210,13 +216,12 @@ void opcaoJogarVila(){
 		    
 			if((xPlayer == 2 && yPlayer == 6) && interagiuComVelho == 0){ //VELHO NPC
 				tocarSom('@');
-				printf("\n\tVelho: Ah, meu jovem... perdi meus óculos no andar de cima.\n"
-						"\tPoderia encontrá-los para mim, por favor?\n"); getch();
-				printf("\n\tResposta: ");
-				scanf("%s", &resposta);
-				printf("\n\tVelho: Ah, muito obrigado, belo rapaz! Meus ouvidos já não são\n"
-				"\tmuito bons como antes, mas você me parece uma boa pessoa!"); getch();
-				tocarSom('@');
+				printf(YELLOW"\n\tVelho"RESET": Ah, meu jovem... Perdi meus óculos no andar de cima.\n"
+							"\tPoderia encontrá-los para mim, por favor?\n"); getch(); tocarSom('M');
+				printf(BLUE"\n\tResposta"RESET": "); 
+				scanf("%s", &resposta); tocarSom('M');
+				printf(YELLOW"\n\tVelho"RESET": Ah, muito obrigado, jovem rapaz! Meus ouvidos já não são\n"
+							"\tmuito bons como antes, mas você me parece uma boa pessoa!"); tocarSom('@');
 				vila[4][2] = '='; //Abre a porta
 				interagiuComVelho = 1;
 			}
@@ -227,34 +232,37 @@ void opcaoJogarVila(){
 					andarSuperiorAtual = 1;
 				   	desenharVila(xPlayer, yPlayer, vida, andarSuperior);
 				}else{
-					desenharVila(xPlayer, yPlayer, vida, andarSuperior);
+					desenharVila(xPlayer, yPlayer, vida, vila);
 					andarSuperiorAtual = 0;
 				}
 			}
 			
 			if((xPlayer == 5 && yPlayer == 2) && interagiuComMentiroso == 0){ //MENTIR0S0 NPC
 				tocarSom('@');
-				printf("\n\t???: Ei, você! Como me encontrou aqui? Ah, não importa mesmo.\n\n"); getch();
-				printf("\t???: Já que estás aqui, gostaria de conseguir grandes riquezas?\n\n"); getch();
-				printf("\t???: Eu deixei minhas milhares de moedas de ouro e relíquias na Dungeon.\n\n"); getch();
-				printf("\t???: Traga o máximo que você conseguir para mim, que eu lhe darei metade.\n\n");getch();
-				printf("\n\tResposta: ");
-				scanf("%s", &resposta);
-				printf("\n\n\t???: Faça como quiser. Mantenho a minha proposta, hihihi!\n"); getch();
-				tocarSom('@');
+				printf(BLACK"\n\t???"RESET": Ei, você! Como me encontrou aqui? "
+						"Ah, não importa mesmo.\n\n"); getch(); tocarSom('M');
+				printf(BLACK"\t???"RESET": Já que estás aqui, gostaria de conseguir "
+						"grandes riquezas?\n\n"); getch(); tocarSom('M');
+				printf(BLACK"\t???"RESET": Eu deixei minhas milhares de moedas de "
+						"ouro e relíquias na Dungeon.\n\n"); getch(); tocarSom('M');
+				printf(BLACK"\t???"RESET": Traga o máximo que você conseguir para "
+						"mim, que eu lhe darei metade.\n\n");getch(); tocarSom('M');
+				printf(BLUE"\n\tResposta"RESET": "); 
+				scanf("%s", &resposta); tocarSom('M');
+				printf(BLACK"\n\n\t???"RESET": Faça como quiser. Mantenho a minha "
+						"proposta, hihihi!\n"); tocarSom('@');
 				interagiuComMentiroso = 1;
-			} desbugarSom = 1;
-		}else tocarSom('E');
+			}else tocarSom('E');
+		}
 
 		if(vila[newY][newX] == ' ' || vila[newY][newX] == '='){
 			xPlayer = newX;
 			yPlayer = newY;
-			if(desbugarSom == 0) tocarSom('M');
-			else tocarSom('E');
+			tocarSom('M');
 			hasValidImput = 1;
 		}else tocarSom('E');
 		
-		if(hasValidImput == 1 && desbugarSom == 0)
+		if(hasValidImput == 1)
 			if(andarSuperiorAtual == 0) desenharVila(xPlayer, yPlayer, vida, vila);
 			else desenharVila(xPlayer, yPlayer, vida, andarSuperior);
 	}
