@@ -1,0 +1,66 @@
+	while(1){
+		int hasValidImput = 0;
+		int desbugarSom = 0;
+		char input = getch();
+		if(input == 'Q'){
+			break;
+		}
+		
+		int newX = xPlayer;
+		int newY = yPlayer;
+		int lastmovx =0,lastmovy=0;
+
+		if(input == 'w' && yPlayer > 0) newY--,lastmovy--;
+		else if(input == 's' && yPlayer < 10) newY++,lastmovy++;
+		else if(input == 'a' && xPlayer > 0) newX--,lastmovx--;
+		else if(input == 'd' && xPlayer < 10) newX++,lastmovx++;
+		else desbugarSom = 1;
+		
+		if(vida==0){
+			limparTela();
+			printf("\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t----{Voce morreu}----");
+			
+			break;
+		}
+
+		if(vila[newY][newX] == ' ' || vila[newY][newX] == '='||vila[newY][newX] == 'l'||vila[newY][newX] == 'L'||vila[newY][newX] == '#'){
+			xPlayer = newX;
+			yPlayer = newY;
+			
+			if(vila[newY][newX] == '#'){
+				vida--;
+				xPlayer= 1;
+				yPlayer= 1;
+			}
+			else{}
+			
+			if(vila[newY][newX] == 'L'){
+				vida--;
+				vida--;
+				vida--;
+				
+			}
+			else{}
+			
+			if(vila[newY][newX] == 'l'){
+				
+				xPlayer = newX+lastmovx;
+				yPlayer = newY+lastmovy;
+				printf("%d %d",lastmovx,lastmovy);
+				continue;
+				
+			}
+			else{}
+				
+			
+			if(desbugarSom == 0) tocarSom('M');
+			else tocarSom('E');
+			hasValidImput = 1;
+		}else{
+			tocarSom('E');
+		}
+		
+		if(hasValidImput == 1 && desbugarSom == 0)
+			desenharVila(xPlayer, yPlayer, vida);
+		
+	}
