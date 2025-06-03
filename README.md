@@ -1,3 +1,67 @@
 # Jogos-2025.2
-Aquele Mentiroso
-A muito tempo atrás, existia pessoas felizes que viviam em harmonia, de certa forma existia um ar místico nas terras do Éden. Porém num dia normal tudo mudaria, um homem estranho começou a se propagar como um "deus", as pessoas encantadas com aquele bendito homem começaram a segui-lo e acreditavam nele, aquele homem então se tornou o rei daquelas pessoas..por muito tempo ele manipulou aquelas pessoas para um plano, nas terras do Éden, tinha um fruto há qual aquele homem queria, ele então ganhou a confiança das pessoas aos poucos ate que conseguiu aquele fruto. Aquele fruto tinha capacidades de realizar um desejo ao come-lo, e ao comer aquele fruto o homem que na verdade não era deus pediu para que todos fossem surdados, as pessoas começaram a perder gradativamente sua audição e começaram a sofrer, pois nunca mais ouviriam as mélodias que a vida poderia proporcionar, mas o desejo do homem tbm logo voltaria ao mesmo. Uma maldição ao comer o fruto foi posta em seu corpo, tornando ele num monstro mentiroso e enganoso, com aparencia de serpente, aquele monstro então começou a viver sozinho e proteger a árvore do fruto que realizava desejos para que ngm nunca mais pegasse seus frutos, e aquele homem comia mais e mais frutos para mais e mais desejos perversos e malignos. Passou-se muitos anos e então uma pessoa nasceu de uma mulher que não tinha relações com nenhum homem, aquele menino então escutou e por ouvir as mélodias da vida berrou em um alto choro, um berro de esperança e de um novo amanhã, aquele menino tinha sido escolhido pra trazer paz e acalento as pessoas daquelas terras de novo, mas não séria fácil sua jornada, ele percebeu as dificuldades que aquele mundo estava tendo e por isso treinou, enquanto treinava pra sobreviver ele ouviu a historia de uma Dungeon, uma dungeon onde um fruto especial estava guardada. Então pra conseguir conquistar o fruto especial ele se preparou para a dungeon, treinando e treinado intensamente. Após alguns anos treinando e lutando, ele foi pra pacata vila antiga há qual encontrou um senhor de idade....e o que acontece agora? Depende de vc agora, pois agora é vc o escolhido para consquitar a Dungeon, tenha uma otima experiência de jogo!
+Aquele Mentiroso!
+Um Jogo de Aventura e Quebra-Cabeças
+
+📜 História do Jogo
+Em um reino distante, uma pequena vila chamada Vila dos Guri vive em paz, mas algo sinistro ronda as profundezas da Grande Dungeon. Dizem que um tesouro incalculável está escondido lá, mas ninguém que entrou jamais voltou...
+
+Você é um jovem aventureiro que chega à vila em busca de fama e fortuna. Ao conversar com os moradores, descobre que um velho perdeu seus óculos no andar superior de sua casa e que um misterioso mentiroso oferece riquezas em troca de ajuda. Será que ele está falando a verdade?
+
+Prepare-se para explorar salas repletas de enigmas, enfrentar monstros traiçoeiros e desvendar os segredos da Sala do Demonhão! Mas cuidado: nem tudo é o que parece, e aquele mentiroso pode estar te levando para uma armadilha...
+
+🎮 Regras do Jogo
+🔹 Objetivo
+Resolver quebra-cabeças, coletar chaves e derrotar monstros para avançar nas fases.
+
+Encontrar a saída da Dungeon e descobrir a verdade por trás do mentiroso.
+
+🔹 Controles
+W, A, S, D → Movimentação (Cima, Esquerda, Baixo, Direita).
+
+E → Interagir com objetos, NPCs ou resolver enigmas.
+
+Q → Voltar ao menu principal.
+
+🔹 Elementos do Jogo
+Símbolo	Significado
+&	Seu personagem
+@	Chave (abre portas)
+D / =	Porta (fechada/aberta)
+H	Escadas (mudam de fase)
+r	Quebra-cabeça (resolva para avançar)
+P	NPC (converse para obter informações)
+$	Placa (dicas importantes)
+#	Espinhos (causam dano)
+L	Lava (morte instantânea)
+-	Limo (escorrega para outra direção)
+V	Fantasma Perseguidor (causa dano)
+> / <	Teletransporte (muda sua posição)
+🔹 Sistema de Vidas
+Você começa com 3 vidas.
+
+Espinhos tiram 1 vida.
+
+Lava e Fantasmas tiram todas as vidas.
+
+Se perder todas as vidas, volta ao menu principal.
+
+🔹 Fases
+Vila dos Guri → Converse com NPCs e encontre os óculos do velho.
+
+Sala dos Enigmas → Resolva puzzles para abrir portas.
+
+Caverna da Perdição → Cuidado com espinhos e monstros.
+
+Sala do Demonhão → Enfrente o chefão final e descubra o segredo do mentiroso!
+
+🏆 Vitória e Derrota
+🎉 Vitória: Se vencer o Demonhão, você desvenda a verdade e salva a vila!
+
+💀 Derrota: Se morrer, o mentiroso ri da sua cara e você volta ao início.
+
+🚀 Comece sua Jornada!
+Entre na Vila dos Guri, converse com os moradores e descubra se o mentiroso está te enganando... ou se há algo pior escondido nas profundezas da Dungeon!
+
+🔴 Aperte qualquer tecla para começar!
+
+Desenvolvido por Samuel, Leonardo e João.
