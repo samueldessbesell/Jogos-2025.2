@@ -141,8 +141,12 @@ void desenharFase1(int xPlayer, int yPlayer, char mapa[11][11], int vida) {
 void fase1(){
 	int xPlayer = 1, yPlayer = 1;
     int vida = 3;
-    int puzzleResolvido = 0;
-    int chaveColetada = 0;
+    int puzzleResolvido1 = 0;
+    int puzzleResolvido2 = 0;
+    int puzzleResolvido3 = 0;
+    int chaveColetada1 = 0;
+    int chaveColetada2 = 0;
+    int chaveColetada3 = 0;
 
 	char mapa[11][11] = {
     "***********",
@@ -161,7 +165,6 @@ void fase1(){
     desenharFase1(xPlayer, yPlayer, mapa, vida);
 
     while(1){
-    	int respostaPuzzle;
         char input = getch();
         if(input == 'Q') break;
         
@@ -171,21 +174,22 @@ void fase1(){
         else if(input == 'a' && xPlayer > 0) newX--;
         else if(input == 'd' && xPlayer < 10) newX++;
         else if(input == 'e'){
-            //Interação com puzzle
-            if(!puzzleResolvido && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == 'X'){
+            //Interação com puzzle 1
+            if(!puzzleResolvido1 && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == 'X'){
                 tocarSom('@');
                 limparTela();
                 printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
                 printf("\t\"Somar 2 + 2 resulta em quê?\"\n");
                 
-                printf(BLUE"\n\tResposta: "RESET);
-                scanf("%d", &respostaPuzzle);
+                int respostaPuzzle1;
+                printf(BLUE"\n\tResposta"RESET": ");
+                scanf("%d", &respostaPuzzle1);
                 
-                if(respostaPuzzle == 4){
+                if(respostaPuzzle1 == 4){
                     tocarSom('V');
                     printf(GREEN"\n\tCorreto! O enigma se desfaz, revelando uma chave no lugar.\n"RESET);
                     getch();
-                    puzzleResolvido = 1;
+                    puzzleResolvido1 = 1;
                     mapa[1][6] = '@';
                 }else{
                     tocarSom('X');
@@ -194,21 +198,95 @@ void fase1(){
                 }
                 desenharFase1(xPlayer, yPlayer, mapa, vida);
             
-            //Coletar a chave
-			}else if(puzzleResolvido && !chaveColetada && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == '@'){
+            //Coletar a chave 1
+			}else if(puzzleResolvido1 && !chaveColetada1 && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == '@'){
                 tocarSom('@');
                 printf(CYAN"\n\tVocê pegou a chave misteriosa.\n"RESET);
                 getch();
-                chaveColetada = 1;
+                chaveColetada1 = 1;
                 mapa[1][6] = ' ';
                 mapa[6][5] = '=';
                 desenharFase1(xPlayer, yPlayer, mapa, vida);
-            }else if(!chaveColetada && abs(xPlayer - 5) + abs(yPlayer - 6) == 1 && mapa[6][5] == 'D'){
+            }else if(!chaveColetada1 && abs(xPlayer - 5) + abs(yPlayer - 6) == 1 && mapa[6][5] == 'D'){
+                tocarSom('E');
+            }
+            
+            //Interação com puzzle 2
+            if(!puzzleResolvido2 && abs(xPlayer - 9) + abs(yPlayer - 6) == 1 && mapa[6][9] == 'X'){
+                tocarSom('@');
+                limparTela();
+                printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
+                printf("\t\"Somar 2 + 2 resulta em quê?\"\n");
+                
+                int respostaPuzzle2;
+                printf(BLUE"\n\tResposta"RESET": ");
+                scanf("%d", &respostaPuzzle2);
+                
+                if(respostaPuzzle2 == 4){
+                    tocarSom('V');
+                    printf(GREEN"\n\tCorreto! O enigma se desfaz, revelando uma chave no lugar.\n"RESET);
+                    getch();
+                    puzzleResolvido2 = 1;
+                    mapa[6][9] = '@';
+                }else{
+                    tocarSom('X');
+                    printf(RED"\n\tResposta incorreta. O enigma permanece intacto.\n"RESET);
+                    getch();
+                }
+                desenharFase1(xPlayer, yPlayer, mapa, vida);
+            
+            //Coletar a chave 2
+			}else if(puzzleResolvido2 && !chaveColetada2 && abs(xPlayer - 9) + abs(yPlayer - 6) == 1 && mapa[6][9] == '@'){
+                tocarSom('@');
+                printf(CYAN"\n\tVocê pegou a chave misteriosa.\n"RESET);
+                getch();
+                chaveColetada2 = 1;
+                mapa[6][9] = ' ';
+                mapa[8][9] = '=';
+                desenharFase1(xPlayer, yPlayer, mapa, vida);
+            }else if(!chaveColetada2 && abs(xPlayer - 9) + abs(yPlayer - 8) == 1 && mapa[8][9] == 'D'){
+                tocarSom('E');
+            }
+            
+            //Interação com puzzle 3
+            if(!puzzleResolvido3 && abs(xPlayer - 3) + abs(yPlayer - 9) == 1 && mapa[9][3] == 'X'){
+                tocarSom('@');
+                limparTela();
+                printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
+                printf("\t\"Ennyn Durin aran. Pedo mellon a minno.\"\n");
+                
+                char respostaPuzzle3[20];
+                printf(BLUE"\n\tResposta"RESET": ");
+                scanf("%s", respostaPuzzle3);
+                
+                if(strcmp(respostaPuzzle3, "mellon") == 0){
+                    tocarSom('V');
+                    printf(GREEN"\n\tMae carnen! O enigma se desfaz, revelando uma chave no lugar.\n"RESET);
+                    getch();
+                    puzzleResolvido3 = 1;
+                    mapa[9][3] = '@';
+                }else{
+                    tocarSom('X');
+                    printf(RED"\n\tResposta incorreta. O enigma permanece intacto.\n"RESET);
+                    getch();
+                }
+                desenharFase1(xPlayer, yPlayer, mapa, vida);
+            
+            //Coletar a chave 3
+			}else if(puzzleResolvido3 && !chaveColetada3 && abs(xPlayer - 3) + abs(yPlayer - 9) == 1 && mapa[9][3] == '@'){
+                tocarSom('@');
+                printf(CYAN"\n\tVocê pegou a chave misteriosa.\n"RESET);
+                getch();
+                chaveColetada3 = 1;
+                mapa[9][3] = ' ';
+                mapa[9][7] = '=';
+                desenharFase1(xPlayer, yPlayer, mapa, vida);
+            }else if(!chaveColetada3 && abs(xPlayer - 5) + abs(yPlayer - 6) == 1 && mapa[6][5] == 'D'){
                 tocarSom('E');
             }
             
             //Para a fase 2
-        	if(mapa[yPlayer][xPlayer] == 'H' && chaveColetada){
+        	if(mapa[yPlayer][xPlayer] == 'H'){
             tocarSom('V');
             limparTela();
             printf(GREEN"\n\tA escada se ilumina e você avança para a Fase 2.\n\n"RESET);
