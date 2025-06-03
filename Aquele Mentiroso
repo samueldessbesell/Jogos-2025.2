@@ -86,6 +86,149 @@ void opcaoSair(){
 	printf(YELLOW"\n\n\t\tObrigado por jogar!\n\n"RESET);
 }
 
+void desenharFase1(int xPlayer, int yPlayer, char mapa[11][11], int vida) {
+    int i, j;
+    limparTela();
+
+    printf(GREEN "\n\n\t    ---{Fase 1: Sala dos Enigma}---\n\n" RESET);
+
+    for(i = 0; i < 11; i++){ //VIDA
+        if(i == 0){ 
+            printf(RED"       Vidas"RESET);
+        }else if(i <= vida){
+            printf("\t{"RED"V"RESET"}");
+        }else{
+            printf("\t");
+        }
+        printf("\t");
+
+        for(j = 0; j < 11; j++){ //MAPA
+            if(i == yPlayer && j == xPlayer){
+                printf(BLUE" &"RESET);
+            }else{
+                char c = mapa[i][j];
+                switch(c){
+                    case '*': printf(BLACK " *" RESET); break;
+                    case 'X': printf(YELLOW " X" RESET); break;
+                    case '@': printf(CYAN " @" RESET); break;
+                    case 'D': printf(BLACK " D" RESET); break;
+                    case '=': printf(" ="); break;
+                    case 'H': printf(" H"); break;
+                    case ' ': printf("  "); break;
+                    default: printf(" %c", c); break;
+                }
+            }
+        }
+
+        printf("\t");
+        switch(i){ //GUIA DE CARACTERES E TECLAS
+			case 0: printf(BOLD"      Guia para os Caracteres"RESET); break;
+			case 1: printf(BLUE"&"RESET" (personagem)"); break;
+			case 2: printf(CYAN"@"RESET" (chave)"); break;
+			case 3: printf("=/"BLACK"D"RESET" (porta aberta/fechada)"); break;
+			case 4: printf("H (escadas para cima/baixo)"); break;
+			case 5: printf(YELLOW"X"RESET" (puzzle)"); break;
+			case 7: printf(BOLD"\tGuia para as Teclas"RESET); break;
+			case 8: printf("w/s (mover para cima/baixo)"); break;
+			case 9: printf("a/d (mover para esquerda/direita)"); break;
+			case 10: printf("e (interagir com item/NPC)"); break;
+		}
+		printf("\n");
+	}
+	printf("\t\t\t\t\tQ (voltar para menu)\n");
+}
+
+void fase1(){
+	int xPlayer = 1, yPlayer = 1;
+    int vida = 3;
+    int puzzleResolvido = 0;
+    int chaveColetada = 0;
+
+	char mapa[11][11] = {
+    "***********",
+    "* *  *X  **",  
+    "* * ****  *",
+    "*     *** *",
+    "***** *   *",
+    "**      ***",
+    "** **D***X*", 
+    "*  **     *",
+    "* *******D*",
+    "*  X*H D  *", 
+    "***********"};
+
+    tocarSom('I');
+    desenharFase1(xPlayer, yPlayer, mapa, vida);
+
+    while(1){
+    	int respostaPuzzle;
+        char input = getch();
+        if(input == 'Q') break;
+        
+        int newX = xPlayer, newY = yPlayer;
+        if(input == 'w' && yPlayer > 0) newY--;
+        else if(input == 's' && yPlayer < 10) newY++;
+        else if(input == 'a' && xPlayer > 0) newX--;
+        else if(input == 'd' && xPlayer < 10) newX++;
+        else if(input == 'e'){
+            //Interação com puzzle
+            if(!puzzleResolvido && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == 'X'){
+                tocarSom('@');
+                limparTela();
+                printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
+                printf("\t\"Somar 2 + 2 resulta em quê?\"\n");
+                
+                printf(BLUE"\n\tResposta: "RESET);
+                scanf("%d", &respostaPuzzle);
+                
+                if(respostaPuzzle == 4){
+                    tocarSom('V');
+                    printf(GREEN"\n\tCorreto! O enigma se desfaz, revelando uma chave no lugar.\n"RESET);
+                    getch();
+                    puzzleResolvido = 1;
+                    mapa[1][6] = '@';
+                }else{
+                    tocarSom('X');
+                    printf(RED"\n\tResposta incorreta. O enigma permanece intacto.\n"RESET);
+                    getch();
+                }
+                desenharFase1(xPlayer, yPlayer, mapa, vida);
+            
+            //Coletar a chave
+			}else if(puzzleResolvido && !chaveColetada && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == '@'){
+                tocarSom('@');
+                printf(CYAN"\n\tVocê pegou a chave misteriosa.\n"RESET);
+                getch();
+                chaveColetada = 1;
+                mapa[1][6] = ' ';
+                mapa[6][5] = '=';
+                desenharFase1(xPlayer, yPlayer, mapa, vida);
+            }else if(!chaveColetada && abs(xPlayer - 5) + abs(yPlayer - 6) == 1 && mapa[6][5] == 'D'){
+                tocarSom('E');
+            }
+            
+            //Para a fase 2
+        	if(mapa[yPlayer][xPlayer] == 'H' && chaveColetada){
+            tocarSom('V');
+            limparTela();
+            printf(GREEN"\n\tA escada se ilumina e você avança para a Fase 2.\n\n"RESET);
+            getch(); break;
+        	}
+        }
+
+        if(input == 'w' || input == 'a' || input == 's' || input == 'd'){
+            char destino = mapa[newY][newX];
+            if(destino == ' ' || destino == '=' || destino == 'H'){
+                xPlayer = newX;
+                yPlayer = newY;
+                tocarSom('M');
+            }else tocarSom('E');
+            
+            desenharFase1(xPlayer, yPlayer, mapa, vida);
+        }
+    }
+}
+
 void desenharVila(int xPlayer, int yPlayer, int vida, char vila[11][11]){
 	int i, j;
 	limparTela();
@@ -109,8 +252,8 @@ void desenharVila(int xPlayer, int yPlayer, int vida, char vila[11][11]){
 				switch(c){
 					case '*': printf(BLACK" *"RESET); break;
 					case 'P':
-						if (i == 1 && j == 5){ //NPC do fim do beco
-							if (xPlayer == 5 && yPlayer >= 2 && yPlayer <= 3){
+						if(i == 1 && j == 5){ //NPC do fim do beco
+							if(xPlayer == 5 && yPlayer >= 2 && yPlayer <= 3){
 								printf(BLACK" P"RESET);
 							}else printf("  ");
 						}else printf(YELLOW" P"RESET); break;
@@ -138,7 +281,7 @@ void desenharVila(int xPlayer, int yPlayer, int vida, char vila[11][11]){
 			case 7: printf(BOLD"\tGuia para as Teclas"RESET); break;
 			case 8: printf("w/s (mover para cima/baixo)"); break;
 			case 9: printf("a/d (mover para esquerda/direita)"); break;
-			case 10: printf("e (interagir)"); break;
+			case 10: printf("e (interagir com item/NPC)"); break;
 			default: printf("\n"); break;
 		}
 		printf("\n");
@@ -163,7 +306,7 @@ char andarSuperior[11][11] = {
 		"*****      ",
 		"*   *      ",
 		"*H  *      ",
-		"*  8*      ",
+		"*   *      ",
 		"*****      ",
 		"           ",
         "           ",
@@ -184,8 +327,11 @@ void opcaoJogarVila(){
 	int interagiuComMentiroso = 0;
 	int andarSuperiorAtual = 0;
 	char resposta[40];
-	//int oculosPegos = 0;
-	//int oculosEntregues = 0;
+	int oculosPegos = 0; 
+	int oculosEntregues = 0;
+	int oculosX = 3, oculosY = 3; //coordenadas no andar superior
+	int portaInferiorX = 5, portaInferiorY = 8; 
+	int placaX = 1, placaY = 9;
 	
 	tocarSom('I');
 	if(andarSuperiorAtual == 0) desenharVila(xPlayer, yPlayer, vida, vila);
@@ -196,6 +342,7 @@ void opcaoJogarVila(){
 		int hasValidImput = 0;
 		char input = getch();
 		if(input == 'Q') break;
+		if(input == '9') fase1();
 
 		int newX = xPlayer;
 		int newY = yPlayer;
@@ -221,7 +368,9 @@ void opcaoJogarVila(){
 				printf(BLUE"\n\tResposta"RESET": "); 
 				scanf("%s", &resposta); tocarSom('M');
 				printf(YELLOW"\n\tVelho"RESET": Ah, muito obrigado, jovem rapaz! Meus ouvidos já não são\n"
-							"\tmuito bons como antes, mas você me parece uma boa pessoa!"); tocarSom('@');
+							"\tmuito bons como antes, mas você me parece uma boa pessoa!\n"); getch(); tocarSom('M');
+				printf(YELLOW"\n\tVelho"RESET": Aliás! Esqueci de avisar, mas os meus óculos são bem pequenos!\n"
+							"\tTalvez não seja tão fácil achá-los, mas eles estão lá. Boa sorte!"); getch(); tocarSom('@');
 				vila[4][2] = '='; //Abre a porta
 				interagiuComVelho = 1;
 			}
@@ -237,6 +386,39 @@ void opcaoJogarVila(){
 				}
 			}
 			
+			//ÓCULOS DO VELHO
+			if(andarSuperiorAtual == 1 && oculosPegos == 0 && xPlayer == oculosX && yPlayer == oculosY){
+			    tocarSom('@');
+			    printf(BOLD"\n\tVocê encontrou um par de óculos antigos. Deve ser do velho lá embaixo.\n"RESET);
+			    getch();
+			    oculosPegos = 1;
+			    andarSuperior[oculosY][oculosX] = ' ';
+			    desenharVila(xPlayer, yPlayer, vida, andarSuperior);
+			}
+			
+			//ENTREGAR ÓCULOS DO VELHO
+			if((xPlayer == 2 && yPlayer == 6) && interagiuComVelho == 1 && oculosPegos == 1 && oculosEntregues == 0){
+			    tocarSom('@');
+			    printf(YELLOW"\n\tVelho"RESET": Oh glória! Você encontrou meus óculos! Agora consigo ver claramente!\n");
+			    getch();
+			    printf(YELLOW"\n\tVelho"RESET": Finalmente poderei abrir o portão ao sul da vila para arejar o local.\n"); getch();
+				printf(YELLOW"\n\tVelho"RESET": Sugiro você não entrar lá. Você se parece muito com o meu filho.\n"
+											"\tEle era muito gentil graças a Deus.\n"); getch();
+				printf(YELLOW"\n\tVelho"RESET": Uma pena que ele tenha se perdido na Dungeon...\n"); getch();
+				printf(YELLOW"\n\tVelho"RESET": Enfim, muito obrigado por sua generosidade. "
+											"Vá com Deus, jovem rapaz!\n"); getch();
+			    vila[portaInferiorY][portaInferiorX] = '='; //Abre a porta sul
+			    oculosEntregues = 1;
+			    desenharVila(xPlayer, yPlayer, vida, vila);
+			}
+			
+            if (xPlayer == placaX+1 && yPlayer == placaY){ //Placa
+                tocarSom('@');
+                printf(RED"\n\tAtenção! Perigo à frente: Cavernas instáveis e armadilhas mortais.\n"RESET);
+                getch();
+                desenharVila(xPlayer, yPlayer, vida, vila);
+            }
+
 			if((xPlayer == 5 && yPlayer == 2) && interagiuComMentiroso == 0){ //MENTIR0S0 NPC
 				tocarSom('@');
 				printf(BLACK"\n\t???"RESET": Ei, você! Como me encontrou aqui? "
@@ -250,11 +432,18 @@ void opcaoJogarVila(){
 				printf(BLUE"\n\tResposta"RESET": "); 
 				scanf("%s", &resposta); tocarSom('M');
 				printf(BLACK"\n\n\t???"RESET": Faça como quiser. Mantenho a minha "
-						"proposta, hihihi!\n"); tocarSom('@');
+						"proposta, hihihi!\n"); getch(); tocarSom('@');
 				interagiuComMentiroso = 1;
 			}else tocarSom('E');
+			
+			if (yPlayer == 9 && xPlayer == 8 && oculosEntregues == 1){
+                tocarSom('@');
+                printf(GREEN"\n\tVocê desce pela escada ao sul e adentra a entrada da Dungeon.\n"RESET);
+                getch(); fase1(); //Chama a fase 1
+                desenharVila(xPlayer, yPlayer, vida, vila);
+			}
 		}
-
+		
 		if(vila[newY][newX] == ' ' || vila[newY][newX] == '='){
 			xPlayer = newX;
 			yPlayer = newY;
@@ -265,8 +454,8 @@ void opcaoJogarVila(){
 		if(hasValidImput == 1)
 			if(andarSuperiorAtual == 0) desenharVila(xPlayer, yPlayer, vida, vila);
 			else desenharVila(xPlayer, yPlayer, vida, andarSuperior);
-	}
-}
+	}	
+}		
 
 void menu(){
 	do{
