@@ -14,6 +14,8 @@
 #define CYAN "\033[36m"
 #define BOLD "\033[1;37m"
 
+void menu();
+
 void habilitarCaracteresBR(){
 	setlocale(LC_ALL, "");
 }
@@ -58,9 +60,11 @@ void opcaoCreditos(){
 		"\t     João Pedro Venuto --- 25300017\n");
 	printf(RED"\n\t\t\tCréditos\n\n"RESET
 			BOLD"\t   Samuel D.\n\n"RESET
+			"\t\tBoss 2\n"
 			"\t\tDiálogo de Personagens\n"
 			"\t\tEfeitos Sonoros e Visuais\n"
-			"\t\tFase 1\n"
+			"\t\tFase 1: Sala dos Enigma\n"
+			"\t\tFase 3: Sala do Demonhão\n"
 			"\t\tGuia de Caracteres e Teclas\n"
 			"\t\tInteração com Chave e NPCs\n"
 			"\t\tMovimentação\n"
@@ -72,13 +76,11 @@ void opcaoCreditos(){
 			"\t\tBotão\n"
 			"\t\tDiálogo de Personagens\n"
 			"\t\tEscorregar no Limo\n"
-			"\t\tEspinho\n"
-			"\t\tFase 2\n"
+			"\t\tEspinhos\n"
+			"\t\tFase 2: Caverna da Perdição\n"
 			"\t\tLava\n\n"
 			BOLD"\t   João V.\n\n"RESET
-			"\t\tBoss 2\n"
-			"\t\tFase 3\n"
-			"\t\tTeletransporte\n");
+			"\t\tLore\n");
 }
 
 void opcaoSair(){
@@ -86,11 +88,200 @@ void opcaoSair(){
 	printf(YELLOW"\n\n\t\tObrigado por jogar!\n\n"RESET);
 }
 
+void vitoria(){
+	/*Vitória: Texto elogiando o jogador por ter conseguido terminar o jogo,
+	depois dessa tela o jogador volta para o Menu Principal. Essa tela só 
+	pode ser acessada se o jogador finalizar a Fase 3;*/
+}
+
+void derrota(int vida){
+	/*Derrota: Texto caçoando o jogador, depois dessa tela o jogador
+	volta para o Menu Principal. Essa tela só pode ser acessada quando
+	o jogador perde em uma fase.*/
+	if(vida == 0) printf("Você morreu. Obrigado por jogar!");
+	menu();
+}
+
+void desenharFase3(int xPlayer, int yPlayer, char mapa[40][40], int vida){
+	//Fase 3: A Fase 3 é inicializada quando o jogador termina a Fase 2;
+	/*Fase 3: Essa fase possui uma dimensão de 40x40 e possui os seguintes
+	elementos: todos da Fase 2 mais teletransporte e o monstro nível 2.*/
+	int i, j;
+    limparTela();
+
+    printf(RED"\n\n\t\t---------------------------{Fase 3: Sala do Demonhão}---------------------------\n\n"RESET);
+
+    for(i = 0; i < 40; i++){ //VIDA
+        if(i == 0){ 
+            printf(RED"       Vidas"RESET);
+        }else if(i <= vida){
+            printf("\t{"RED"V"RESET"}");
+        }else{
+            printf("\t");
+        }
+        printf("\t");
+
+        for(j = 0; j < 41; j++){ //MAPA
+            if(i == yPlayer && j == xPlayer){
+                printf(BLUE" &"RESET);
+            }else{
+                char c = mapa[i][j];
+                switch(c){
+                    case '*': printf(BLACK" *" RESET); break;
+                    case 'r': printf(YELLOW " r" RESET); break;
+                    case '@': printf(CYAN " @" RESET); break;
+                    case 'D': printf(BLACK " D" RESET); break;
+                    case '=': printf(" ="); break;
+                    case 'H': printf(" H"); break;
+                    case ' ': printf("  "); break;
+                    case 'l': printf(GREEN" -"RESET); break;
+                    case 'L': printf(RED" -"RESET	); break;
+                    default: printf(" %c", c); break;
+                }
+            }
+        }
+
+        printf("\t");
+        switch(i){ //GUIA DE CARACTERES E TECLAS
+			case 0: printf(BOLD"      Guia para os Caracteres"RESET); break;
+			case 1: printf(BLUE"&"RESET" (personagem)"); break;
+			case 2: printf(CYAN"@"RESET" (chave)"); break;
+			case 3: printf("=/"BLACK"D"RESET" (porta aberta/fechada)"); break;
+			case 4: printf("H (escadas para cima/baixo)"); break;
+			case 5: printf(YELLOW"r"RESET" (puzzle)"); break;
+			case 7: printf(BOLD"\tGuia para as Teclas"RESET); break;
+			case 8: printf("w/s (mover para cima/baixo)"); break;
+			case 9: printf("a/d (mover para esquerda/direita)"); break;
+			case 10: printf("e (interagir com item/NPC)"); break;
+			case 11: printf("Q (voltar para menu)"); break;
+		}
+		printf("\n");
+	}
+}
+
+	char mapaFase3[40][40] = {
+    "****************************************", // 0
+    "**********l L  **********l L  l*********", // 1
+    "*     L  l*    *        l*    *l  L     *", // 2
+    "*   X     *    *    O    *    *     X   *", // 3
+    "*         *    *    L    *    *    L    *", // 4
+    "***********    ***********    **********", // 5
+    "*         L                          L   *", // 6
+    "*    **********    *****    **********   *", // 7
+    "*    *   L    *    * L *    *        *   *", // 8
+    "*    *   V    *    *   *    *   O    *   *", // 9
+    "*    *        ******   ******    L   *   *", // 10
+    "*    *                            L  *   *", // 11
+    "*    **********    L****    **********   *", // 12
+    "*                                        *", // 13
+    "*   L     #####################l     L   *", // 14
+    "*         #      L            l#         *", // 15
+    "*         #   *   *  O  *   *  #         *", // 16
+    "*         #                    #         *", // 17
+    "*         #   X    L       X   #         *", // 18
+    "*         #         L          #         *", // 19
+    "*         ######################         *", // 20
+    "*                                        *", // 21
+    "*   >   LLLLLLLLLLLLLLLLL          >     *", // 22
+    "*   LLLl                                 *", // 23
+    "* LLL********             *********      *", // 24
+    "*LL  *      *             *       *      *", // 25
+    "*    *  @   *    LL       *   P   *      *", // 26
+    "*    *      *     L       *       *      *", // 27
+    "*    ********     L       *********      *", // 28
+    "*                                        *", // 29
+    "*         LLLL   ***********         L   *", // 30
+    "*            L   *         *         L   *", // 31
+    "*    *********   *   #   O *         L   *", // 32
+    "*    *       *   *   L     *         L   *", // 33
+    "*    *   X   *   ***********         L   *", // 34
+    "*    *       *          L            L   *", // 35
+    "*    *********   L    #########      L   *", // 36
+    "*                LL   #   LL         L   *", // 37
+    "*                     #########      L   *", // 38
+    "******************************************"}; // 39
+
+	
+void fase3(){
+	int xPlayer = 4, yPlayer = 30;
+	int vida = 3;
+	  
+	tocarSom('I');
+    desenharFase3(xPlayer, yPlayer, mapaFase3, vida);
+    
+    while(1){
+        char input = getch();
+        if(input == 'Q') menu();
+        
+        int newX = xPlayer, newY = yPlayer;
+        if(input == 'w' && yPlayer > 0) newY--;
+        else if(input == 's' && yPlayer < 40) newY++;
+        else if(input == 'a' && xPlayer > 0) newX--;
+        else if(input == 'd' && xPlayer < 40) newX++;
+        else if(input == 'e'){
+			if(xPlayer == 4 && yPlayer == 22){
+				xPlayer = 35;
+				yPlayer = 22;
+				desenharFase3(xPlayer, yPlayer, mapaFase3, vida);
+			}else if(xPlayer == 35 && yPlayer == 22){
+				xPlayer = 4;
+				yPlayer = 22;
+				desenharFase3(xPlayer, yPlayer, mapaFase3, vida);
+			}
+		}
+	  
+
+        if(input == 'w' || input == 'a' || input == 's' || input == 'd'){
+            char destino = mapaFase3[newY][newX];
+            if(destino == ' ' || destino == '=' || destino == 'H' || destino == 'L' || destino == 'l' || destino == '>'){
+                xPlayer = newX;
+                yPlayer = newY;
+                tocarSom('M');
+            }else tocarSom('E');
+            
+            desenharFase3(xPlayer, yPlayer, mapaFase3, vida);
+        }
+    }
+}
+
+void desenharFase2(){
+	//Fase 2: A Fase 2 é inicializada quando o jogador termina a Fase 1;
+	/*Fase 2: Essa fase possui uma dimensão de 20x20 e possui os seguintes
+	elementos: todos da Fase 1 mais botão, espinhos e o monstro nível 1;*/
+	
+}
+
+char mapaFase2[20][20] = {//MAPA DA FASE 2
+"********************",
+"*####*   *         *",
+"*####*   *         *",
+"*        *         *",
+"* o      *  ********",
+"*        *  *      *",
+"*        *  *      *",
+"*        *  *      *",
+"*           *      *",
+"*        *  *      *",
+"**********         *",
+"*           **** ***",
+"*           **** ***",
+"*           **** ***",
+"*           ****l***",
+"*           *****  *",
+"*           ******D*",
+"*           *      *",
+"*           *   H  *",
+"********************"};
+
+void fase2(){
+	
+}
+
 void desenharFase1(int xPlayer, int yPlayer, char mapa[11][11], int vida) {
     int i, j;
     limparTela();
 
-    printf(GREEN "\n\n\t    ---{Fase 1: Sala dos Enigma}---\n\n" RESET);
+    printf(GREEN"\n\n\t    ---{Fase 1: Sala dos Enigma}---\n\n"RESET);
 
     for(i = 0; i < 11; i++){ //VIDA
         if(i == 0){ 
@@ -109,7 +300,7 @@ void desenharFase1(int xPlayer, int yPlayer, char mapa[11][11], int vida) {
                 char c = mapa[i][j];
                 switch(c){
                     case '*': printf(BLACK " *" RESET); break;
-                    case 'X': printf(YELLOW " X" RESET); break;
+                    case 'r': printf(YELLOW " r" RESET); break;
                     case '@': printf(CYAN " @" RESET); break;
                     case 'D': printf(BLACK " D" RESET); break;
                     case '=': printf(" ="); break;
@@ -127,7 +318,7 @@ void desenharFase1(int xPlayer, int yPlayer, char mapa[11][11], int vida) {
 			case 2: printf(CYAN"@"RESET" (chave)"); break;
 			case 3: printf("=/"BLACK"D"RESET" (porta aberta/fechada)"); break;
 			case 4: printf("H (escadas para cima/baixo)"); break;
-			case 5: printf(YELLOW"X"RESET" (puzzle)"); break;
+			case 5: printf(YELLOW"r"RESET" (puzzle)"); break;
 			case 7: printf(BOLD"\tGuia para as Teclas"RESET); break;
 			case 8: printf("w/s (mover para cima/baixo)"); break;
 			case 9: printf("a/d (mover para esquerda/direita)"); break;
@@ -150,23 +341,24 @@ void fase1(){
 
 	char mapa[11][11] = {
     "***********",
-    "* *  *X  **",  
+    "* *  *r  **",  
     "* * ****  *",
     "*     *** *",
     "***** *   *",
     "**      ***",
-    "** **D***X*", 
+    "** **D***r*", 
     "*  **     *",
     "* *******D*",
-    "*  X*H D  *", 
+    "*  r*H D  *", 
     "***********"};
-
+	
     tocarSom('I');
     desenharFase1(xPlayer, yPlayer, mapa, vida);
 
     while(1){
         char input = getch();
-        if(input == 'Q') break;
+        if(input == 'Q') menu();
+        if(input == '9') fase3();
         
         int newX = xPlayer, newY = yPlayer;
         if(input == 'w' && yPlayer > 0) newY--;
@@ -175,17 +367,17 @@ void fase1(){
         else if(input == 'd' && xPlayer < 10) newX++;
         else if(input == 'e'){
             //Interação com puzzle 1
-            if(!puzzleResolvido1 && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == 'X'){
+            if(!puzzleResolvido1 && abs(xPlayer - 6) + abs(yPlayer - 1) == 1 && mapa[1][6] == 'r'){
                 tocarSom('@');
                 limparTela();
                 printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
-                printf("\t\"Somar 2 + 2 resulta em quê?\"\n");
+                printf("\t\"Quanto é a metade de dois mais dois?\"\n");
                 
                 int respostaPuzzle1;
                 printf(BLUE"\n\tResposta"RESET": ");
                 scanf("%d", &respostaPuzzle1);
                 
-                if(respostaPuzzle1 == 4){
+                if(respostaPuzzle1 == 3){
                     tocarSom('V');
                     printf(GREEN"\n\tCorreto! O enigma se desfaz, revelando uma chave no lugar.\n"RESET);
                     getch();
@@ -195,6 +387,7 @@ void fase1(){
                     tocarSom('X');
                     printf(RED"\n\tResposta incorreta. O enigma permanece intacto.\n"RESET);
                     getch();
+                    vida--;
                 }
                 desenharFase1(xPlayer, yPlayer, mapa, vida);
             
@@ -212,17 +405,17 @@ void fase1(){
             }
             
             //Interação com puzzle 2
-            if(!puzzleResolvido2 && abs(xPlayer - 9) + abs(yPlayer - 6) == 1 && mapa[6][9] == 'X'){
+            if(!puzzleResolvido2 && abs(xPlayer - 9) + abs(yPlayer - 6) == 1 && mapa[6][9] == 'r'){
                 tocarSom('@');
                 limparTela();
                 printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
-                printf("\t\"Somar 2 + 2 resulta em quê?\"\n");
+                printf("\t\"Quantos dentes tem o ser humano adulto?\"\n");
                 
                 int respostaPuzzle2;
                 printf(BLUE"\n\tResposta"RESET": ");
                 scanf("%d", &respostaPuzzle2);
                 
-                if(respostaPuzzle2 == 4){
+                if(respostaPuzzle2 == 32){
                     tocarSom('V');
                     printf(GREEN"\n\tCorreto! O enigma se desfaz, revelando uma chave no lugar.\n"RESET);
                     getch();
@@ -232,6 +425,7 @@ void fase1(){
                     tocarSom('X');
                     printf(RED"\n\tResposta incorreta. O enigma permanece intacto.\n"RESET);
                     getch();
+                    vida--;
                 }
                 desenharFase1(xPlayer, yPlayer, mapa, vida);
             
@@ -249,7 +443,7 @@ void fase1(){
             }
             
             //Interação com puzzle 3
-            if(!puzzleResolvido3 && abs(xPlayer - 3) + abs(yPlayer - 9) == 1 && mapa[9][3] == 'X'){
+            if(!puzzleResolvido3 && abs(xPlayer - 3) + abs(yPlayer - 9) == 1 && mapa[9][3] == 'r'){
                 tocarSom('@');
                 limparTela();
                 printf(YELLOW"\n\tUm enigma surge gravado em pedra:\n\n"RESET);
@@ -269,6 +463,7 @@ void fase1(){
                     tocarSom('X');
                     printf(RED"\n\tResposta incorreta. O enigma permanece intacto.\n"RESET);
                     getch();
+                    vida--;
                 }
                 desenharFase1(xPlayer, yPlayer, mapa, vida);
             
@@ -285,12 +480,12 @@ void fase1(){
                 tocarSom('E');
             }
             
-            //Para a fase 2
+            //Para a fase 2 //FASE 3 PROVISORIAMENTE
         	if(mapa[yPlayer][xPlayer] == 'H'){
             tocarSom('V');
             limparTela();
             printf(GREEN"\n\tA escada se ilumina e você avança para a Fase 2.\n\n"RESET);
-            getch(); break;
+            getch(); fase3(); //break;
         	}
         }
 
