@@ -1,0 +1,263 @@
+char fase2[20][20] = {//MAPA DA FASE 2
+"********************",
+"*####*   *         *",
+"*####*   *         *",
+"*        *         *",
+"* o      *  ********",
+"*        *  *      *",
+"*        *  *      *",
+"*        *  *      *",
+"*           *      *",
+"*        *  *      *",
+"**********         *",
+"*           **** ***",
+"*           **** ***",
+"*           **** ***",
+"*           ****l***",
+"*           *****  *",
+"*           ******D*",
+"*           *      *",
+"*           *   H  *",
+"********************"};
+
+void desenharFase2(int monsmovx, int monsmovy, int xPlayer, int yPlayer, int vida, char fase2[20][20]){
+	int i, j;
+	limparTela();
+
+	printf(GREEN"\n\n\t\t------{caverna da perdição}------\n\n"RESET);
+	
+	for (i = 0; i < 20; i++){
+		if(i == 0){
+			printf(RED"       Vidas"RESET);
+		}else if(i <= vida){ //VIDA
+			printf("\t{"RED"V"RESET"}");
+		}else printf("\t");
+
+		printf("\t");
+		
+		for(j = 0; j < 20; j++){ //MAPA
+			
+			if(i == yPlayer && xPlayer == j){
+				printf(BLUE" &"RESET);}
+			else if(i==monsmovx && monsmovy == j){//MOVIMENTAÇÃO MONSTRO
+				printf(BLUE" y"RESET);
+			}
+				
+				else{
+				char c = fase2[i][j];
+				switch(c){
+					case '*': printf(BLACK" *"RESET); break;
+					case 'P':
+						if (i == 1 && j == 5){ //NPC do fim do beco
+							if (xPlayer == 5 && yPlayer >= 2 && yPlayer <= 3){
+								printf(BLACK" P"RESET);
+							}else printf("  ");
+						}else printf(YELLOW" P"RESET); break;
+					case 'D': printf(BLACK" D"RESET); break;
+					case '=': printf(" ="); break;
+					case 'H': printf(" H"); break;
+					case '$': printf(" $"); break;
+					case '@': printf(CYAN" @"RESET); break;
+					case ' ': printf("  "); break;
+					case 'y': printf("y"); break;
+					default: printf(" %c", c); break;
+				}
+			}
+			
+		}
+		
+		printf("\t");
+		
+		switch(i){ //GUIA DE CARACTERES E TECLAS
+			case 0: printf(BOLD"      Guia para os Caracteres"RESET); break;
+			case 1: printf(BLUE"&"RESET" (personagem)"); break;
+			case 2: printf(CYAN"@"RESET" (chave)"); break;
+			case 3: printf("=/"BLACK"D"RESET" (porta aberta/fechada)"); break;
+			case 4: printf("H (escadas para cima/baixo)"); break;
+			case 5: printf("$ (placa)"); break;
+			case 6: printf(YELLOW"P"RESET" (NPC)"); break;
+			case 7: printf(BOLD"\tGuia para as Teclas"RESET); break;
+			case 8: printf("w/s (mover para cima/baixo)"); break;
+			case 9: printf("a/d (mover para esquerda/direita)"); break;
+			case 10: printf("e (interagir)"); break;
+			
+		}
+		printf("\n");
+	}
+	printf("\t\t\t\t\tQ (voltar para menu)\n");
+}
+
+void opcaoJogarfase2(){
+	int xPlayer = 8, yPlayer = 1;
+	int monsmovx =6 ,monsmovy =17;
+	int chaveX = 7, chaveY = 1;
+	int portaX = 00, portaY = 0;
+	int vida = 3;
+	int chaveColetada = 0;
+	int botaoativado =0;
+	int botaoY=4;
+	int botaoX=2;
+	
+	
+	tocarSom('I');
+	
+
+	//MOVIMENTAÇÃO
+	while(1){
+		
+		int newmonX = monsmovx;
+		int newmonY = monsmovy;
+		int hasValidImput = 0;
+		char input = getch();
+		if(input == 'Q') break;
+
+		int newX = xPlayer;
+		int newY = yPlayer;
+		int lastmovx =0,lastmovy=0;
+		
+		
+
+		if(input == 'w' && yPlayer > 0) newY--,lastmovy--;
+		else if(input == 's' && yPlayer < 20) newY++,lastmovy++;
+		else if(input == 'a' && xPlayer > 0) newX--,lastmovx--;
+		else if(input == 'd' && xPlayer < 20) newX++,lastmovx++;
+		
+			if(input == 'w' && monsmovy > 0) monsmovy++;
+			else if(input == 's' && monsmovy < 20) monsmovy--;//MOVIMENTAÇÃO MONSTRO
+			else if(input == 'a' && monsmovx > 0) monsmovx++;
+			else if(input == 'd' && monsmovx < 20) monsmovx--;
+
+		
+		
+			if(input == 'e'){
+		    	if(chaveColetada == 0 && ((abs(xPlayer - chaveX) + abs(yPlayer - chaveY)) == 1)){ //CHAVE DA CASA
+		        tocarSom('@');
+		        chaveColetada = 1;
+		        fase2[chaveY][chaveX] = ' '; //Remove a chave
+		        fase2[portaY][portaX] = '='; //Abre a porta
+		        desenharFase2(monsmovy,monsmovx,xPlayer, yPlayer, vida, fase2);}
+		        
+		        if(botaoativado==0 && ((abs(xPlayer - botaoX) + abs(yPlayer - botaoY)) == 1)){
+					botaoativado++;
+					
+					printf("%d",botaoativado);
+				}
+				else if(botaoativado==1 && ((abs(xPlayer - botaoX) + abs(yPlayer - botaoY)) == 1)){//SISTEMA DO BOTAO
+					botaoativado--;
+					
+					printf("%d",botaoativado);
+				}
+		    }
+
+void opcaoJogarfase2(){
+	int xPlayer = 8, yPlayer = 1;
+	int monsmovx =6 ,monsmovy =17;
+	int chaveX = 7, chaveY = 1;
+	int portaX = 00, portaY = 0;
+	int vida = 3;
+	int chaveColetada = 0;
+	int botaoativado =0;
+	int botaoY=4;
+	int botaoX=2;
+	
+	
+	tocarSom('I');
+	
+
+	//MOVIMENTAÇÃO
+	while(1){
+		
+		int newmonX = monsmovx;
+		int newmonY = monsmovy;
+		int hasValidImput = 0;
+		char input = getch();
+		if(input == 'Q') break;
+
+		int newX = xPlayer;
+		int newY = yPlayer;
+		int lastmovx =0,lastmovy=0;
+		
+		
+
+		if(input == 'w' && yPlayer > 0) newY--,lastmovy--;
+		else if(input == 's' && yPlayer < 20) newY++,lastmovy++;
+		else if(input == 'a' && xPlayer > 0) newX--,lastmovx--;
+		else if(input == 'd' && xPlayer < 20) newX++,lastmovx++;
+		
+			if(input == 'w' && monsmovy > 0) monsmovy++;
+			else if(input == 's' && monsmovy < 20) monsmovy--;//MOVIMENTAÇÃO MONSTRO
+			else if(input == 'a' && monsmovx > 0) monsmovx++;
+			else if(input == 'd' && monsmovx < 20) monsmovx--;
+
+		
+		
+			if(input == 'e'){
+		    	if(chaveColetada == 0 && ((abs(xPlayer - chaveX) + abs(yPlayer - chaveY)) == 1)){ //CHAVE DA CASA
+		        tocarSom('@');
+		        chaveColetada = 1;
+		        fase2[chaveY][chaveX] = ' '; //Remove a chave
+		        fase2[portaY][portaX] = '='; //Abre a porta
+		        desenharFase2(monsmovy,monsmovx,xPlayer, yPlayer, vida, fase2);}
+		        
+		        if(botaoativado==0 && ((abs(xPlayer - botaoX) + abs(yPlayer - botaoY)) == 1)){
+					botaoativado++;
+					
+					printf("%d",botaoativado);
+				}
+				else if(botaoativado==1 && ((abs(xPlayer - botaoX) + abs(yPlayer - botaoY)) == 1)){//SISTEMA DO BOTAO
+					botaoativado--;
+					
+					printf("%d",botaoativado);
+				}
+		    }
+		    
+		    
+			
+			
+			
+			
+			
+
+		if(fase2[newY][newX] == ' ' || fase2[newY][newX] == '='||fase2[newY][newX] == '#'||fase2[newY][newX] == 'L'||fase2[newY][newX] == 'l'){
+			newmonX = monsmovx;
+			newmonY = monsmovy;
+			
+			xPlayer = newX;
+			yPlayer = newY;
+			tocarSom('M');
+			hasValidImput = 1;
+				if(fase2[newY][newX] == '#'){
+				vida--;
+				xPlayer= 18;
+				yPlayer= 2;
+			}
+			else{}
+			
+			if(fase2[newY][newX] == 'L'){//MOVIMENTAÇÃO LAVA
+				vida--;
+				vida--;
+				vida--;
+				
+			}
+			else{}
+			
+			if(fase2[newY][newX] == 'l'){//movimentação limo
+				
+				xPlayer = newX+lastmovx;
+				yPlayer = newY+lastmovy;
+				continue;
+				
+			}
+			else{}
+				
+				if(fase2[newX][newY]=='Y'){
+				
+				}
+				
+		}
+		else tocarSom('E');
+		desenharFase2(monsmovy,monsmovx,xPlayer, yPlayer, vida, fase2);
+		
+		
+	}
+}
